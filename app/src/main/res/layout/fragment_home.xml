@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeFragment">
+
+    <EditText
+        android:id="@+id/editTextTextPersonName2"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="60dp"
+        android:drawableLeft="@drawable/magnifying_glass_solid"
+        android:drawablePadding="8dp"
+        android:ems="10"
+        android:hint="Введите название товара или бренда"
+        android:inputType="textPersonName"
+        android:textColorHint="@color/lavender"
+        android:textCursorDrawable="@color/lavender"
+        android:background="@drawable/custom_input"
+        android:textSize="14sp"
+
+
+        />
+</RelativeLayout>
