@@ -1,5 +1,7 @@
 package com.example.lovelychecker;
 
+import java.util.List;
+
 import javax.xml.transform.Result;
 
 import retrofit2.http.Body;
@@ -28,6 +30,10 @@ public interface interfaceAPI {
 
     @GET("login/oauth2/{service}")
     Call<Void> oauth2(@Path(value="service") String service);
+
+    @GET("chats")
+    Call<List<Chat>> getChats();
+
 
     //@GET("/chats")
     //Call<Void> chatList(@Body )
