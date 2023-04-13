@@ -1,44 +1,48 @@
 package com.example.lovelychecker;
 
 public class Chat {
-    private int id;
-    private String title;
-    private String image;
-    private double averageRating;
-    private double price;
-    private int countRatings;
+    private String id;
+    private User user;
+    private Message lastMessage;
+    private Product product;
 
-    public Chat(int id, String title, String image, double averageRating, double price, int countRatings) {
+    public Chat(String id, User user, Message lastMessage, Product product) {
         this.id = id;
-        this.title = title;
-        this.image = image;
-        this.averageRating = averageRating;
-        this.price = price;
-        this.countRatings = countRatings;
+        this.user = user;
+        this.lastMessage = lastMessage;
+        this.product = product;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public String getTitle() {
-        return title;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getImage() {
-        return image;
+    public User getUser() {
+        return user;
     }
 
-    public double getAverageRating() {
-        return averageRating;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public double getPrice() {
-        return price;
+    public Message getLastMessage() {
+        return lastMessage;
     }
 
-    public int getCountRatings() {
-        return countRatings;
+    public void setLastMessage(Message lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }
 

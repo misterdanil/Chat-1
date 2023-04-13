@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -42,20 +43,32 @@ public class ChatsFragment extends Fragment {
 
     private void loadChats() {
         interfaceAPI apiInterface = RetrofitClientInstance.getInstance();
-        Call<List<Chat>> call = apiInterface.getChats();
+        Call<List<Chat>> call = apiInterface.getChats(RetrofitClientInstance.ACCESS_TOKEN);
 
+        List<Chat> chats = new ArrayList<>();
+//        chats.add(new Chat("1", new User("1", "Себастьян", "Бах", "SebBach"), new Message("1", "lol", new User("1", "Эксл", "Роуз", "AxlRrr")), new Product("3", "Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD")));
+//        chats.add(new Chat("1", new User("1", "Себастьян", "Бах", "SebBach"), new Message("1", "lol", new User("1", "Эксл", "Роуз", "AxlRrr")), new Product("3", "Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD")));
+//        chats.add(new Chat("1", new User("1", "Себастьян", "Бах", "SebBach"), new Message("1", "lol", new User("1", "Эксл", "Роуз", "AxlRrr")), new Product("3", "Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD")));
+//        chats.add(new Chat("1", new User("1", "Себастьян", "Бах", "SebBach"), new Message("1", "lol", new User("1", "Эксл", "Роуз", "AxlRrr")), new Product("3", "Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD")));
+//        chats.add(new Chat("1", new User("1", "Себастьян", "Бах", "SebBach"), new Message("1", "lol", new User("1", "Эксл", "Роуз", "AxlRrr")), new Product("3", "Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD")));
+//        chatAdapter = new ChatAdapter(getContext(), chats);
+//        recyclerView.setAdapter(chatAdapter);
         call.enqueue(new Callback<List<Chat>>() {
             @Override
             public void onResponse(Call<List<Chat>> call, Response<List<Chat>> response) {
-                chatList = response.body();
-                chatAdapter = new ChatAdapter(getContext(), chatList);
-                recyclerView.setAdapter(chatAdapter);
+               if(response.isSuccessful()) {
+                   chatList = response.body();
+                   chatList.add(new Chat("1", new User("1", "Себастьян", "Бах", "SebBach"), new Message("1", "Добрый день, да, фокусировка у фотоаппарата есть", new User("1", "Эксл", "Роуз", "AxlRrr"), new Date()), new Product("3", "Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD")));
+                   chatAdapter = new ChatAdapter(getContext(), chatList, getActivity());
+                   recyclerView.setAdapter(chatAdapter);
+               }
+               else {
+                   System.err.println("Couldn't get chats - " + response.code());
+               }
             }
-
             @Override
             public void onFailure(Call<List<Chat>> call, Throwable t) {
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-
             }
         });
     }
