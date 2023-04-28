@@ -1,9 +1,15 @@
 package com.example.lovelychecker;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +17,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +47,26 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_window);
 
+        interfaceAPI apiService = RetrofitClientInstance.getInstance();
+
+        Activity activity = this;
+
+        Call<Product> callProduct = apiService.getProduct("643ebc440de30442d805f2fb");
+        callProduct.enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                if (response.isSuccessful()) {
+                    Product product = response.body();
+                    ((TextView)findViewById(R.id.chat_image_productName)).setText(product.getTitle());
+                    new ImageBitmapUriTask(activity, findViewById(R.id.product_image)).execute(RetrofitClientInstance.BASE_URL + "/" + "product/smartphones/" + product.getId() + "/image");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+
+            }
+        });
 
 
         View view = findViewById(R.id.button_gchat_send);
@@ -45,9 +75,7 @@ public class ChatActivity extends AppCompatActivity {
 
             String text = messageEditText.getText().toString();
 
-            interfaceAPI apiService = RetrofitClientInstance.getInstance();
-
-            Call<Void> call = apiService.sendMessage("6435ce493572c97e7243c5cd", MultipartBody.Part.createFormData("text", text), null, RetrofitClientInstance.ACCESS_TOKEN);
+            Call<Void> call = apiService.sendMessage("64484a0eb343f63f514908d0", MultipartBody.Part.createFormData("text", text), null, RetrofitClientInstance.ACCESS_TOKEN);
 
             call.enqueue(new Callback<Void>() {
                 @Override
@@ -115,10 +143,7 @@ public class ChatActivity extends AppCompatActivity {
 //
 //        setProductRecylder(item);
 
-        interfaceAPI apiService = RetrofitClientInstance.getInstance();
-
-        Call<List<Message>> call = apiService.getMessages("6435ce493572c97e7243c5cd");
-
+        Call<List<Message>> call = apiService.getMessages("64484a0eb343f63f514908d0");
         call.enqueue(new Callback<List<Message>>() {
             @Override
             public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
@@ -128,7 +153,7 @@ public class ChatActivity extends AppCompatActivity {
                         item.add(message2);
                     });
 
-                    setProductRecylder(item, "6435ce493572c97e7243c5cd");
+                    setProductRecylder(item, "64484a0eb343f63f514908d0");
 
                 }
                 else {
@@ -161,5 +186,48 @@ public class ChatActivity extends AppCompatActivity {
     public void find(View view){
         String text = finder.getText().toString();
         //Вставить функцию поиска через сервер
+    }
+    public static class SetImageTask implements Runnable {
+        private ImageView imageView;
+        private Bitmap bitmap;
+        public SetImageTask(ImageView imageView, Bitmap bitmap) {
+            this.imageView = imageView;
+            this.bitmap = bitmap;
+        }
+
+        @Override
+        public void run() {
+            imageView.setImageBitmap(bitmap);
+        }
+    }
+
+    public static class ImageBitmapUriTask extends AsyncTask<String, Void, Void> {
+
+        private ImageView imageView;
+        private Activity activity;
+
+        public ImageBitmapUriTask(Activity acitivty, ImageView imageView) {
+            this.activity = acitivty;
+            this.imageView = imageView;
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+            try {
+                URL url = new URL(params[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                activity.runOnUiThread(new SetImageTask(imageView, myBitmap));
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+        }
     }
 }

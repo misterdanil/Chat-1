@@ -123,6 +123,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if(!itemViewHolder.setdDate) {
                     itemViewHolder.globalDateView.setVisibility(View.GONE);
                 }
+                else {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(message.getCreatedOn());
+                    String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, new Locale("ru", "RU"));
+                    String dayAndMonth = calendar.get(Calendar.DAY_OF_MONTH) + " " + month;
+                    itemViewHolder.globalDateView.setText(dayAndMonth);
+                }
 
                 itemViewHolder.messageView.setText(message.getText());
 

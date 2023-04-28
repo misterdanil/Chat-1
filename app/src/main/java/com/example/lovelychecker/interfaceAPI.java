@@ -46,6 +46,9 @@ public interface interfaceAPI {
     @GET("/chats")
     Call<List<Chat>> getChats(@Header(value = "Authorization") String token);
 
+    @GET("/product/smartphone/{id}")
+    Call<Product> getProduct(@Path("id") String id);
+
 
     //@GET("/chats")
     //Call<Void> chatList(@Body )

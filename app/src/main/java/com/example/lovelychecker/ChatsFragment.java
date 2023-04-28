@@ -1,7 +1,10 @@
 package com.example.lovelychecker;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,32 +22,32 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChatsFragment extends Fragment {
+public class ChatsFragment extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ChatAdapter chatAdapter;
     private List<Chat> chatList;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chats, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_chats);
 
-        recyclerView = view.findViewById(R.id.chats_recycler_view);
+        recyclerView = findViewById(R.id.chats_recycler_view);
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         chatList = new ArrayList<>();
 
         loadChats();
-
-        return view;
     }
 
     private void loadChats() {
         interfaceAPI apiInterface = RetrofitClientInstance.getInstance();
         Call<List<Chat>> call = apiInterface.getChats(RetrofitClientInstance.ACCESS_TOKEN);
 
+        Context context = this;
+        Activity activity = this;
         List<Chat> chats = new ArrayList<>();
 //        chats.add(new Chat("1", new User("1", "Себастьян", "Бах", "SebBach"), new Message("1", "lol", new User("1", "Эксл", "Роуз", "AxlRrr")), new Product("3", "Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD")));
 //        chats.add(new Chat("1", new User("1", "Себастьян", "Бах", "SebBach"), new Message("1", "lol", new User("1", "Эксл", "Роуз", "AxlRrr")), new Product("3", "Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD")));
@@ -59,7 +62,7 @@ public class ChatsFragment extends Fragment {
                if(response.isSuccessful()) {
                    chatList = response.body();
                    chatList.add(new Chat("1", new User("1", "Себастьян", "Бах", "SebBach"), new Message("1", "Добрый день, да, фокусировка у фотоаппарата есть", new User("1", "Эксл", "Роуз", "AxlRrr"), new Date()), new Product("3", "Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD Смартфон Apple IPhone 13 Pro Max Dual Slim 256 GB FWAWADSD")));
-                   chatAdapter = new ChatAdapter(getContext(), chatList, getActivity());
+                   chatAdapter = new ChatAdapter(context, chatList, activity);
                    recyclerView.setAdapter(chatAdapter);
                }
                else {
@@ -68,7 +71,7 @@ public class ChatsFragment extends Fragment {
             }
             @Override
             public void onFailure(Call<List<Chat>> call, Throwable t) {
-                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

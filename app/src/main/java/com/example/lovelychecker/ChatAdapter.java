@@ -49,6 +49,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
         Chat chat = chats.get(position);
         holder.title.setText(chat.getUser().getFirstName());
+        new ChatActivity.ImageBitmapUriTask(activity, holder.image).execute(RetrofitClientInstance.BASE_URL + "/" + "product/smartphones/" + chat.getProduct().getId() + "/image");
         if(chat.getLastMessage() != null) {
             holder.message.setText(chat.getLastMessage().getText());
 

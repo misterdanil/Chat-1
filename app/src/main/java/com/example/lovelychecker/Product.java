@@ -1,21 +1,17 @@
 package com.example.lovelychecker;
 
-import java.util.Map;
+import com.google.gson.internal.LinkedTreeMap;
 
+import java.util.Map;
 public class Product {
     private String id;
     private String title;
+    private byte[] image;
     private Double fromPrice;
     private Double toPrice;
-    private Map<String, Object> characteristics;
 
-    public Product(String id, String title, Double fromPrice, Double toPrice, Map<String, Object> characteristics) {
-        this.id = id;
-        this.title = title;
-        this.fromPrice = fromPrice;
-        this.toPrice = toPrice;
-        this.characteristics = characteristics;
-    }
+    private Double averageRating;
+    private LinkedTreeMap<String, Object> characteristics;
 
     public Product(String id, String title) {
         this.id = id;
@@ -38,6 +34,14 @@ public class Product {
         this.title = title;
     }
 
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
     public Double getFromPrice() {
         return fromPrice;
     }
@@ -54,11 +58,19 @@ public class Product {
         this.toPrice = toPrice;
     }
 
-    public Map<String, Object> getCharacteristics() {
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public LinkedTreeMap<String, Object> getCharacteristics() {
         return characteristics;
     }
 
-    public void setCharacteristics(Map<String, Object> characteristics) {
+    public void setCharacteristics(LinkedTreeMap<String, Object> characteristics) {
         this.characteristics = characteristics;
     }
 }
